@@ -19,17 +19,22 @@ mobileapp.controller('VtigerBodyController', function ($scope, $api, $mdUtil, $m
     function scopeApply(fn) {
         $scope.$$phase ? fn() : $scope.$apply(fn);
     }
+
+	$scope.setSelectedApp = function (selectedApp) {
+		$scope.selectedApp = selectedApp.toUpperCase();
+	}
     
     $scope.init = function () {
         $api('userInfo', function (e, r) {
             if (r) {
+				var currentApp = jQuery.url().param('app');
                 scopeApply(function () {
                     $scope.userinfo = r.userinfo;
                     $scope.apps = r.apps;
                     $scope.menus = r.menus;
                     $scope.edition = r.edition;
-                    $scope.selectedApp = r.defaultApp.toUpperCase();
-                    $scope.dynamicTheme = r.defaultApp.toUpperCase();
+                    $scope.selectedApp = currentApp.toUpperCase();
+                    $scope.dynamicTheme = currentApp.toUpperCase();
                     $scope.$root.$emit('UserInfo.Changed');
                 });
             }
